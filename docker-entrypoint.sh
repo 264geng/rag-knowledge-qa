@@ -1,14 +1,17 @@
 #!/bin/bash
 cd /app/backend
 
+# 使用 Railway 分配的 PORT 环境变量
+PORT=${PORT:-8000}
+
 # 启动uvicorn到后台
-uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+uvicorn app.main:app --host 0.0.0.0 --port $PORT &
 SERVER_PID=$!
 
 # 等待服务启动
 echo "等待服务启动..."
 for i in $(seq 1 30); do
-    if curl -s http://localhost:8000/api/auth/me > /dev/null 2>&1; then
+    if curl -s http://localhost:$PORT/api/auth/me > /dev/null 2>&1; then
         echo "服务已启动"
         break
     fi

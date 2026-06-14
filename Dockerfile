@@ -21,6 +21,9 @@ RUN cd frontend && npm run build
 # 复制后端代码
 COPY backend/ backend/
 
+# 将前端构建产物复制到后端目录（供 FastAPI 静态文件服务使用）
+RUN mkdir -p backend/frontend && cp -r frontend/dist backend/frontend/dist
+
 # 创建数据目录
 RUN mkdir -p backend/data/uploads
 
