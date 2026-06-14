@@ -35,7 +35,6 @@ ENV CORS_ORIGINS=["*"]
 
 EXPOSE 8000
 
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+WORKDIR /app/backend
 
-CMD ["/app/docker-entrypoint.sh"]
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
