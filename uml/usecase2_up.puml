@@ -1,0 +1,58 @@
+@startuml 哔哩哔哩APP用例图_UP主与管理员
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #CE93D8
+  BorderColor #7B1FA2
+  FontSize 13
+}
+skinparam actor {
+  BackgroundColor #4FC3F7
+  BorderColor #0277BD
+  FontSize 14
+}
+skinparam rectangle {
+  BackgroundColor #F5F5F5
+  BorderColor #999999
+}
+
+title 哔哩哔哩APP用例图 — UP主与管理员
+
+rectangle "哔哩哔哩APP系统" as BiliBili {
+  usecase "上传视频" as UC1
+  usecase "编辑视频信息" as UC2
+  usecase "删除视频" as UC3
+  usecase "查看数据统计" as UC4
+  usecase "管理稿件" as UC5
+  usecase "直播开播" as UC6
+  usecase "回复评论" as UC7
+  usecase "审核视频" as UC8
+  usecase "删除违规内容" as UC9
+  usecase "封禁用户" as UC10
+  usecase "管理分类标签" as UC11
+  usecase "处理举报" as UC12
+}
+
+actor "UP主" as UP
+actor "管理员" as Admin
+
+UP --> UC1
+UP --> UC2
+UP --> UC3
+UP --> UC4
+UP --> UC5
+UP --> UC6
+UP --> UC7
+
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+
+UC2 ..> UC1 : <<extend>>
+UC3 ..> UC5 : <<include>>
+UC9 ..> UC8 : <<include>>
+
+@enduml

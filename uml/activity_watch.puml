@@ -1,0 +1,40 @@
+@startuml 观看视频活动图
+skinparam activity {
+  BackgroundColor #E3F2FD
+  BorderColor #1565C0
+  FontSize 13
+}
+skinparam swimlane {
+  BackgroundColor #FFF9C4
+  BorderColor #F9A825
+  FontSize 14
+}
+
+title 观看视频 — 活动图
+
+|用户|
+start
+:打开哔哩哔哩APP;
+:浏览首页/搜索视频;
+:点击视频封面;
+
+|系统|
+:加载视频详情页;
+:初始化播放器;
+:开始播放视频;
+
+|用户|
+repeat
+  :观看视频;
+repeat while (是否继续观看？) is (是)
+  -> 否;
+
+|系统|
+:记录观看历史;
+:更新播放次数;
+
+|用户|
+:关闭视频页面;
+stop
+
+@enduml

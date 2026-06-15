@@ -1,0 +1,62 @@
+@startuml 哔哩哔哩APP用例图_用户端
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #FFD700
+  BorderColor #B8860B
+  FontSize 13
+}
+skinparam actor {
+  BackgroundColor #4FC3F7
+  BorderColor #0277BD
+  FontSize 14
+}
+skinparam rectangle {
+  BackgroundColor #F5F5F5
+  BorderColor #999999
+}
+
+title 哔哩哔哩APP用例图 — 用户端
+
+rectangle "哔哩哔哩APP系统" as BiliBili {
+  usecase "注册/登录" as UC1
+  usecase "搜索视频" as UC2
+  usecase "观看视频" as UC3
+  usecase "发送弹幕" as UC4
+  usecase "发表评论" as UC5
+  usecase "点赞" as UC6
+  usecase "投币" as UC7
+  usecase "收藏" as UC8
+  usecase "关注UP主" as UC9
+  usecase "分享视频" as UC10
+  usecase "浏览推荐页" as UC11
+  usecase "管理个人信息" as UC12
+  usecase "查看观看历史" as UC13
+  usecase "直播观看" as UC14
+}
+
+actor "普通用户" as User
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+
+UC4 ..> UC3 : <<include>>
+UC5 ..> UC3 : <<include>>
+UC6 ..> UC3 : <<extend>>
+UC7 ..> UC3 : <<extend>>
+UC8 ..> UC3 : <<extend>>
+
+@enduml
