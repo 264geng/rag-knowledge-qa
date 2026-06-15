@@ -55,6 +55,9 @@ def startup_event():
         db.update_user_admin(admin_user["id"], True)
         print(f"[系统] 已恢复默认管理员账户的权限: {settings.ADMIN_USERNAME}")
 
+    # 自动创建测试用户和知识库
+    _create_test_data()
+
     # 创建风格化 Prompt 模板（跳过已存在的）
     existing_templates = db.get_prompt_templates()
     existing_names = {t["name"] for t in existing_templates}
@@ -141,6 +144,82 @@ def root():
         "status": "running",
         "docs": "/docs",
     }
+
+
+def _create_test_data():
+    """自动创建测试用户和知识库"""
+    # 测试用户
+    test_users = [
+        ("admin1", "user123", False),
+        ("zhangsan", "user123", False),
+        ("lisi", "user123", False),
+        ("wangwu", "user123", False),
+        ("一只鱼", "user123", False),
+        ("两只鱼", "user123", False),
+    ]
+
+    user_ids = {}
+    for username, password, is_admin in test_users:
+        user = db.get_user_by_username(username)
+        if not user:
+            hashed = hash_password(password)
+            uid = db.create_user(username, hashed, is_admin)
+            user_ids[username] = uid
+        else:
+            user_ids[username] = user["id"]
+
+    # 获取管理员ID
+    admin_user = db.get_user_by_username("admin")
+    if admin_user:
+        user_ids["admin"] = admin_user["id"]
+
+    # 检查是否已有测试知识库
+    existing_kbs = db.get_all_knowledge_bases()
+    if len(existing_kbs) >= 3:
+        return  # 已有数据，跳过
+
+    # 测试知识库
+    test_kbs = [
+        {"name": "Python编程核心技术", "desc": "Python语言核心技术文档", "owner": "admin", "vis": "public"},
+        {"name": "JavaScript前端开发", "desc": "JavaScript语言核心知识", "owner": "zhangsan", "vis": "public"},
+        {"name": "机器学习入门教程", "desc": "从零开始学习机器学习", "owner": "admin", "vis": "public"},
+        {"name": "Web开发全栈教程", "desc": "从前端到后端的Web开发教程", "owner": "zhangsan", "vis": "public"},
+        {"name": "数据库技术大全", "desc": "关系型和非关系型数据库技术", "owner": "lisi", "vis": "private"},
+        {"name": "项目管理知识体系", "desc": "项目管理方法论和最佳实践", "owner": "lisi", "vis": "shared", "share_with": ["zhangsan"]},
+        {"name": "个人学习笔记", "desc": "日常学习积累的知识点", "owner": "wangwu", "vis": "private"},
+        {"name": "人工智能前沿技术", "desc": "AI领域最新技术动态", "owner": "admin", "vis": "private"},
+    ]
+
+    for kb_info in test_kbs:
+        owner = kb_info["owner"]
+        owner_id = user_ids.get(owner)
+        if not owner_id:
+            continue
+
+        # 检查知识库是否已存在
+        owner_kbs = db.get_knowledge_bases_by_user(owner_id)
+        if any(kb["name"] == kb_info["name"] for kb in owner_kbs):
+            continue
+
+        kb_id = db.create_knowledge_base(kb_info["name"], kb_info["desc"], owner_id)
+
+        # 设置可见性
+        vis = kb_info.get("vis", "private")
+        if vis != "private":
+            db.update_kb_visibility(kb_id, vis)
+
+        # 公开的需要审核通过
+        if vis == "public":
+            db.update_kb_visibility(kb_id, "public")
+
+        # 分享给用户
+        if vis == "shared" and "share_with" in kb_info:
+            for share_user in kb_info["share_with"]:
+                share_user_id = user_ids.get(share_user)
+                if share_user_id:
+                    db.share_knowledge_base(kb_id, share_user_id, owner_id)
+
+    print(f"[系统] 已创建测试数据：{len(test_users)} 个用户，{len(test_kbs)} 个知识库")
 
 
 @app.get("/health")
