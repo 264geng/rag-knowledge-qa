@@ -178,16 +178,29 @@ def _create_test_data():
     if len(existing_kbs) >= 3:
         return  # 已有数据，跳过
 
-    # 测试知识库
+    # 测试知识库（14个）
     test_kbs = [
-        {"name": "Python编程核心技术", "desc": "Python语言核心技术文档", "owner": "admin", "vis": "public"},
-        {"name": "JavaScript前端开发", "desc": "JavaScript语言核心知识", "owner": "zhangsan", "vis": "public"},
-        {"name": "机器学习入门教程", "desc": "从零开始学习机器学习", "owner": "admin", "vis": "public"},
-        {"name": "Web开发全栈教程", "desc": "从前端到后端的Web开发教程", "owner": "zhangsan", "vis": "public"},
-        {"name": "数据库技术大全", "desc": "关系型和非关系型数据库技术", "owner": "lisi", "vis": "private"},
+        # admin 的知识库
+        {"name": "端午", "desc": "端午节放假三天。", "owner": "admin", "vis": "public"},
+        {"name": "Python编程核心技术", "desc": "Python语言核心技术文档，涵盖基础语法、高级特性", "owner": "admin", "vis": "public"},
+        {"name": "机器学习入门教程", "desc": "从零开始学习机器学习，包含理论和实践", "owner": "admin", "vis": "public"},
+        {"name": "人工智能前沿技术", "desc": "AI领域最新技术动态和研究成果", "owner": "admin", "vis": "private"},
+        {"name": "公司管理章程", "desc": "公司内部管理制度和规范", "owner": "admin", "vis": "public"},
+        # zhangsan 的知识库
+        {"name": "JavaScript前端开发", "desc": "JavaScript语言核心知识和前端开发技术", "owner": "zhangsan", "vis": "public"},
+        {"name": "Web开发全栈教程", "desc": "从前端到后端的完整Web开发教程", "owner": "zhangsan", "vis": "public"},
+        # lisi 的知识库
+        {"name": "数据库技术大全", "desc": "关系型和非关系型数据库技术文档", "owner": "lisi", "vis": "private"},
         {"name": "项目管理知识体系", "desc": "项目管理方法论和最佳实践", "owner": "lisi", "vis": "shared", "share_with": ["zhangsan"]},
-        {"name": "个人学习笔记", "desc": "日常学习积累的知识点", "owner": "wangwu", "vis": "private"},
-        {"name": "人工智能前沿技术", "desc": "AI领域最新技术动态", "owner": "admin", "vis": "private"},
+        # wangwu 的知识库
+        {"name": "个人学习笔记", "desc": "日常学习过程中积累的知识点", "owner": "wangwu", "vis": "private"},
+        # admin1 的知识库
+        {"name": "端午", "desc": "端午快乐！", "owner": "admin1", "vis": "shared", "share_with": ["一只鱼"]},
+        # 一只鱼 的知识库
+        {"name": "学习方法", "desc": "学习技巧", "owner": "一只鱼", "vis": "public"},
+        {"name": "你好", "desc": "你好", "owner": "一只鱼", "vis": "pending"},
+        # 两只鱼 的知识库
+        {"name": "国庆节", "desc": "国庆节放七天。", "owner": "两只鱼", "vis": "shared", "share_with": ["admin1", "一只鱼"]},
     ]
 
     for kb_info in test_kbs:
